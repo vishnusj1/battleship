@@ -9,6 +9,11 @@ const GameBoard = () => {
     return arr;
   };
 
+  const isPosValid = ({ x, y }) => {
+    if (x > 9 || y > 9) return false;
+    return true;
+  };
+
   const selectPosition = ({ x, y }, i) => {
     let row = x;
     let col = y + i;
@@ -19,6 +24,7 @@ const GameBoard = () => {
   let placedShips = [];
 
   const placeShip = (ship, pos) => {
+    if (isPosValid(pos) === false) return;
     for (let i = 0; i < ship.length; i++) {
       const [row, col] = selectPosition(pos, i);
       board[row][col] = { ship, hitIndex: i, hit: false };
@@ -28,7 +34,7 @@ const GameBoard = () => {
 
   const recieveAttack = (pos) => {
     const { x: row, y: col } = pos;
-    if (row || col === undefined) return;
+    if (isPosValid(pos) === false) return;
     if (board[row][col] === null) {
       board[row][col] = 'miss';
     } else if (typeof board[row][col] === 'object') {
@@ -46,6 +52,7 @@ const GameBoard = () => {
     placeShip,
     recieveAttack,
     allShipSunk,
+    isPosValid,
     get arr() {
       return board;
     },
@@ -54,5 +61,4 @@ const GameBoard = () => {
     },
   };
 };
-
 module.exports = GameBoard;
